@@ -5,6 +5,14 @@ Worklog
   o create_player no longer has inventory 
     (externalised to own var)
   o print_player -> log_player
+- Functions added:
+  o print_player
+- HTML:
+  o added headers to each section
+  o added divs and spans for character stats
+- CSS:
+  o altered h1
+  o wrote .thin_col, .thick_col
   
 25 OCT 2014
 - Functions created:

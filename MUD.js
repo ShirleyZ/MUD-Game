@@ -1,5 +1,8 @@
 /* JS file for MUD Game Functions*/
 
+
+// #### PLAYER ####
+
 var player;
 
 function create_player (name) {
@@ -14,7 +17,7 @@ function create_player (name) {
   };
   player = a;
   return a;
-}
+};
 
 function log_player (chara) {
   console.log(chara.name);
@@ -24,7 +27,7 @@ function log_player (chara) {
               " STR: " + chara.strength + 
               " INT: " + chara.intelligence);
   
-}
+};
 
 function print_player () {
   document.getElementById("charName").innerHTML = player.name;
@@ -34,10 +37,102 @@ function print_player () {
   document.getElementById("strength").innerHTML = player.strength;
   document.getElementById("intelligence").innerHTML = player.intelligence;
   
-}
+};
+
+// #### Player Navigation/Commands ###
+
+var commands = ["n", "s", "e", "w",  // Navigation
+                "look", "take", "drop", // Interaction
+                "help"];
+
+function parse_command (command) {
+  /** PURPOSE: grab the text that the player has entered and see
+      what commands are being made. Then call the correct function
+  
+  */
+  
+  command.trim();
+  var commandFound = false;
+  var searchResult = -2;
+  var i = 0; // Counter for char # of command string
+  var j = 0; // Counter for which command in commands array 
+  
+  /** FIRST VERSION OF FUNCTION
+      For loop compares first word of the user input command with 
+      the list of legal commands as defined in commands variable.
+  
+      It compares the first letter of the string to each
+      first letter of each command in the commands variable.
+        - If they match, a search for the command word is performed,
+          if not, the loop continues.
+        - The search result only cares if the command word is at the
+          front of the string (0), otherwise it is ignored.
+        - If search returns a 0, a command was found and the loop
+          is broken, anything else, result is reset and the loop 
+          continues.
+  */
+  
+  /*for (i = 0; i < commands.length; i++) {
+    console.log("Comparing " + command[0] + " with " 
+                + commands[i][0]);
+    if (command[0] == commands[i][0]) {
+      console.log("Match found. Searching for " + commands[i] + 
+                  " in " + command);
+      searchResult = command.search(commands[i]);
+      if (searchResult == 0) {
+        console.log("Match found. Breaking loop.");
+        commandFound = true;
+        break;
+      } else {
+        console.log("Match not found. Search result reset.");
+        searchResult = -2;
+      }
+    }
+    j++;
+  }*/
+  
+  /** SECOND (IMPROVED) VERSION OF FUNCTION
+      For loop compares first word of the user input command with 
+      the list of legal commands as defined in commands variable.
+      
+      Searches for commands by searching through the list
+      - If found, makes sure that it is its own word (look not 
+        looking) or that it is a one letter command (n)
+      - If not, search result is reset
+      
+      NOTE: searchResult is set to -2 for debugging purposes
+            -2 should never naturally come up as a search result, so
+            if the result is -2 we can tell if it just didn't go off
+  */
+  for (i = 0; i < commands.length; i++) {
+    console.log("Searching for " + commands[i] + " in " + command);
+    searchResult = command.search(commands[i]);
+    if (searchResult == 0) {
+      console.log(i + ": Is " + commands[i].length + " a space?");
+      if (command[commands[i].length] == " " || command.length == 1) {
+        console.log("Match found. Breaking loop.");
+        commandFound = true;
+        break;
+      } else {
+        console.log("Command is not its own word. Search result reset.");
+        searchResult = -2;
+      }
+    } else {
+      console.log("Match not found. Search result reset.");
+      searchResult = -2;
+    }
+  }
+  
+  if (commandFound == true) {
+    console.log("A command was found");
+  } else {
+    console.log("Sorry, I don't understand what you're saying");
+  }
+  
+};
 
 
-// #### Rooms ####
+// #### Room Creation/Editing ####
 var map = new Array;
 
 function create_room (name, desc) {
@@ -48,7 +143,7 @@ function create_room (name, desc) {
     envItems: new Array
   }
   map.push(newRoom);
-}
+};
 
 function add_room_exit (roomID, exitDirection, destinationRoomID) {
   if (roomID < map.length) {
@@ -102,7 +197,7 @@ function add_room_exit (roomID, exitDirection, destinationRoomID) {
   } else {
     error("No such room exists");
   }
-} // End add_room_exit
+}; // End add_room_exit
 
 var print_room = function (roomID) {
   document.getElementById("roomName").innerHTML = map[roomID].name;
@@ -140,13 +235,14 @@ var log_room = function (roomID) {
     }
   }
   
-}
+};
 
 var log_all_rooms = function () {
   for (key in map) {
     log_room(key);
   }
-}
+};
+
 // #### Env(ironment) Items #### 
 /** List of items that users can interact with in
     the rooms of the maps.
@@ -169,20 +265,20 @@ var add_new_env_item = function (roomID, name, desc, method) {
   }
   envItems.push(newEnvItem);
   map[roomID].envItems.push(newEnvItem);
-}
+};
 
 var log_env_item = function (envItemID) {
   console.log(envItems[envItemID].name + " [ID:" + envItemID + 
               "] [Room:" + envItems[envItemID].roomID + "] [" + 
               envItems[envItemID].method + "] : " + 
               envItems[envItemID].desc);
-}
+};
 
 var log_all_env_items = function () {
   for (key in envItems) {
     log_env_item(key);
   }
-}
+};
 // #### Inventory Items #### 
 /** List of items that users can interact with in
     the rooms of the maps.
