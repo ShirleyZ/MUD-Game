@@ -1,0 +1,26 @@
+Worklog
+
+26 OCT 2014
+- Functions altered:
+  o create_player no longer has inventory 
+    (externalised to own var)
+  o print_player -> log_player
+  
+25 OCT 2014
+- Functions created:
+  o add_new_env_item();
+  o log_env_item();
+  o log_all_env_items
+  o log_all_rooms
+- Functions altered:
+  o print_room: Now only prints room details to page
+    - Now prints the exits of the room too
+    + log_room: Logs room info into console
+- Other changes:
+  o Changed var environItems -> envItems
+    - better consistency with function names
+      (e.g. add_new_env_item)
+  o Created MUDCSS file
+    - .thin/thick_col created
+    - h1 altered for section headings
+    

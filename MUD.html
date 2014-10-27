@@ -1,0 +1,40 @@
+<html>
+  <head>
+    <title>Hello World</title>
+    <script src="MUD.js"></script>
+    <link rel="stylesheet" type="text/css" href="MUDCSS.css">
+  </head>
+  <body>
+    <div id="wrapper">
+      <div id="stats" class="thin_col">
+        <h1>-- Character Stats --</h1>
+        <div id="charName"></div>
+        <div>
+        <br>
+        HP: <span id="hp"></span>/<span id="maxhp"></span>
+        <br>
+        SPEED: <span id="speed"></span>
+        <br>
+        STRENGTH: <span id="strength"></span>
+        <br>
+        INTELLIGENCE: <span id="intelligence"></span>
+        </div>
+      </div> 
+      <div id="content" class="thick_col">
+        <h1>-- <span id="roomName">
+        </span> --</h1>
+        <div id="roomDesc">
+        </div>
+        <div>
+        This room has the following exits: 
+        <span id="roomExits"></span>
+        </div>
+      </div>
+      <div id="Inventory" class="thin_col">
+        <h1>-- Inventory --</h1>
+      </div>
+    </div>
+    <!-- SCRIPTS TO LOAD AFTER PAGE -->
+    <script src="MUDGame1.js"></script>
+  </body>
+</html>
