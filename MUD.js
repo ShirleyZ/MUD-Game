@@ -1,4 +1,10 @@
-/* JS file for MUD Game Functions*/
+/*  JS file for MUD Game Functions
+
+    TODO/DIRECTION:
+    - Just implemented parse_command
+    - Able to find command, prog what hapens next
+
+*/
 
 
 // #### PLAYER ####
@@ -54,45 +60,9 @@ function parse_command (command) {
   command.trim();
   var commandFound = false;
   var searchResult = -2;
-  var i = 0; // Counter for char # of command string
-  var j = 0; // Counter for which command in commands array 
+  var i = 0; // Counter for which command in commands array 
   
-  /** FIRST VERSION OF FUNCTION
-      For loop compares first word of the user input command with 
-      the list of legal commands as defined in commands variable.
-  
-      It compares the first letter of the string to each
-      first letter of each command in the commands variable.
-        - If they match, a search for the command word is performed,
-          if not, the loop continues.
-        - The search result only cares if the command word is at the
-          front of the string (0), otherwise it is ignored.
-        - If search returns a 0, a command was found and the loop
-          is broken, anything else, result is reset and the loop 
-          continues.
-  */
-  
-  /*for (i = 0; i < commands.length; i++) {
-    console.log("Comparing " + command[0] + " with " 
-                + commands[i][0]);
-    if (command[0] == commands[i][0]) {
-      console.log("Match found. Searching for " + commands[i] + 
-                  " in " + command);
-      searchResult = command.search(commands[i]);
-      if (searchResult == 0) {
-        console.log("Match found. Breaking loop.");
-        commandFound = true;
-        break;
-      } else {
-        console.log("Match not found. Search result reset.");
-        searchResult = -2;
-      }
-    }
-    j++;
-  }*/
-  
-  /** SECOND (IMPROVED) VERSION OF FUNCTION
-      For loop compares first word of the user input command with 
+  /** For loop compares first word of the user input command with 
       the list of legal commands as defined in commands variable.
       
       Searches for commands by searching through the list
@@ -104,6 +74,7 @@ function parse_command (command) {
             -2 should never naturally come up as a search result, so
             if the result is -2 we can tell if it just didn't go off
   */
+  
   for (i = 0; i < commands.length; i++) {
     console.log("Searching for " + commands[i] + " in " + command);
     searchResult = command.search(commands[i]);
@@ -129,7 +100,7 @@ function parse_command (command) {
     console.log("Sorry, I don't understand what you're saying");
   }
   
-};
+}; // End parse_function
 
 
 // #### Room Creation/Editing ####
