@@ -1,5 +1,26 @@
 Worklog
 
+31 OCT 2014
+- Functions worked on:
+  o parse_command, now calls up a function for
+    things to happen
+- Functions added:
+  o execute_commands, 
+    - added ability to move between rooms
+    - added ability to look at things within the room
+- Things fixed:
+  o Listing room exits now has ', '
+- Changed n/w/s/e commands to a single 'go' command
+  Reason: Only check for 'go' command and you can have
+  different directions. Also allows adding more direction
+  types, eg nw, ne, up, down
+- HTML:
+  o Added notifications box and userCommandBox to middle 
+    column
+- CSS:
+  o lengthened column heights to accomodate notif and 
+    usercomm divs
+  
 26 OCT 2014
 - Functions altered:
   o create_player no longer has inventory 

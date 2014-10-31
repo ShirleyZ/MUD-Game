@@ -1,7 +1,7 @@
 /* CSS file for MUD Game */
 
 .thin_col, .thick_col {
-  height: 300px;
+  height: 500px;
   border: 1px solid black;
   border-radius: 10px;
   float: left;
@@ -23,4 +23,13 @@
 h1 {
   font-size: 18px;
   text-align: center;
+}
+
+#content {
+  height: 250px;
+}
+
+#notifications {
+  height: 200px;
+  border-top: 1px solid black;
 }

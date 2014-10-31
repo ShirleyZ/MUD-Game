@@ -1,8 +1,16 @@
 /*  JS file for MUD Game Functions
 
     TODO/DIRECTION:
-    - Just implemented parse_command
-    - Able to find command, prog what hapens next
+    - Able to find command, prog what happens next
+    - Look command implemented, ISSUE: Basket and 
+      basket are different
+    - Implement notification/command box
+    
+    LOOSE ENDS:
+    - parse_commands, single word functions, still 
+      needed?
+    - Look commands should print descriptions and 
+      commands into notifications box, not con.log
 
 */
 
@@ -47,17 +55,19 @@ function print_player () {
 
 // #### Player Navigation/Commands ###
 
-var commands = ["n", "s", "e", "w",  // Navigation
+var commands = ["go",  // Navigation
                 "look", "take", "drop", // Interaction
                 "help"];
 
-function parse_command (command) {
+var currRoom;
+
+function parse_command (userInput) {
   /** PURPOSE: grab the text that the player has entered and see
       what commands are being made. Then call the correct function
   
   */
   
-  command.trim();
+  userInput.trim();
   var commandFound = false;
   var searchResult = -2;
   var i = 0; // Counter for which command in commands array 
@@ -76,13 +86,24 @@ function parse_command (command) {
   */
   
   for (i = 0; i < commands.length; i++) {
-    console.log("Searching for " + commands[i] + " in " + command);
-    searchResult = command.search(commands[i]);
+    console.log("Searching for " + commands[i] + " in " + userInput);
+    searchResult = userInput.search(commands[i]);
     if (searchResult == 0) {
       console.log(i + ": Is " + commands[i].length + " a space?");
-      if (command[commands[i].length] == " " || command.length == 1) {
-        console.log("Match found. Breaking loop.");
+      if (userInput[commands[i].length] == " " || userInput.length == 1) {
+        console.log("Match found.");
+        execute_command(i, userInput);
+        console.log("Command executed. Breaking loop.");
         commandFound = true;
+        break;
+      } else if (userInput == commands[i]) {
+        console.log("Single command word found");
+        commandFound = true;
+        if (userInput == "look") {
+          // execute_command();
+        } else {
+          console.log(userInput + " what?");
+        }
         break;
       } else {
         console.log("Command is not its own word. Search result reset.");
@@ -100,8 +121,68 @@ function parse_command (command) {
     console.log("Sorry, I don't understand what you're saying");
   }
   
-}; // End parse_function
+}; // End parse_command
 
+function execute_command(commandID, userInput) {
+  var commandInfo = "";
+  var i = 0;
+  
+  if (commands[commandID] == "go") {
+  
+    commandInfo = userInput.slice(3);
+    console.log(commandInfo);
+    var toRoom = -1;
+    
+    if (commandInfo == "n" || commandInfo == "north") {
+      toRoom = helper_find_exit("n");
+    } else if (commandInfo == "s" || commandInfo == "south") {
+      toRoom = helper_find_exit("s");
+    } else if (commandInfo == "e" || commandInfo == "east") {
+      toRoom = helper_find_exit("e");
+    } else if (commandInfo == "w" || commandInfo == "west") {
+      toRoom = helper_find_exit("w");
+    } 
+    
+    if (toRoom != -1) {
+      console.log("To room " + toRoom);
+      print_room(toRoom);
+    } else {
+      console.log("Room not found");
+    }
+    
+    
+  } if (commands[commandID] == "look") {
+    
+    commandInfo = userInput.slice(5);
+    console.log(commandInfo);
+    var itemDesc = "";
+    var itemFound = 0;
+    
+    for (key in currRoom.envItems) {
+      console.log("Comparing '" + commandInfo + "' [with] '" + currRoom.envItems[key].name + "'");
+      if (currRoom.envItems[key].name == commandInfo) {
+        if (currRoom.envItems[key].method == "look") {
+          console.log(currRoom.envItems[key].desc);
+          itemFound = 1;
+        }
+      }
+    }
+    
+    if (itemFound == 0) {
+      console.log("What? That's not here.");
+    }
+  }
+}; // End execute_command
+
+function helper_find_exit(direction) {
+  var toRoom = -1;
+  for (key in currRoom.exits) {
+    if (currRoom.exits[key].exitDir == direction) {
+      toRoom = currRoom.exits[key].destination;
+    }
+  }
+  return toRoom;
+}
 
 // #### Room Creation/Editing ####
 var map = new Array;
@@ -175,21 +256,20 @@ var print_room = function (roomID) {
   document.getElementById("roomDesc").innerHTML = map[roomID].desc;
   var exits = "";
   if (map[roomID].exits[0] != null) {
-    console.log("ee");
+    console.log("Exits exist, printing exits");
     for (key in map[roomID].exits) {
       console.log("Key: " + key);
-      exits = exits + map[roomID].exits[key].exitDir;
+      exits = exits + ", " + map[roomID].exits[key].exitDir;
       console.log(exits);
-      if (map[roomID].exits[key+1] != null) {
-        exits = exits + ", ";
-      }
     }
+    exits = exits.slice(1);
     document.getElementById("roomExits").innerHTML = exits;
     
   } else {
     exits = "none";
   }
   console.log("Room " + roomID + " printed");
+  currRoom = map[roomID];
 }
 
 var log_room = function (roomID) {
