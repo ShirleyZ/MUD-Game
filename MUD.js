@@ -154,6 +154,7 @@ function execute_command(commandID, userInput) {
   } if (commands[commandID] == "look") {
     
     commandInfo = userInput.slice(5);
+    commandInfo = commandInfo.toLowerCase();
     console.log(commandInfo);
     var itemDesc = "";
     var itemFound = 0;
@@ -163,6 +164,8 @@ function execute_command(commandID, userInput) {
       if (currRoom.envItems[key].name == commandInfo) {
         if (currRoom.envItems[key].method == "look") {
           console.log(currRoom.envItems[key].desc);
+          itemDesc = currRoom.envItems[key].desc;
+          
           itemFound = 1;
         }
       }
@@ -170,7 +173,17 @@ function execute_command(commandID, userInput) {
     
     if (itemFound == 0) {
       console.log("What? That's not here.");
+      itemDesc = "What? That's not here.";
     }
+
+
+    var txtNode = document.createTextNode(itemDesc);
+    var div = document.createElement('div');
+    var notifBox = document.getElementById('notificationsBox');
+    
+    div.appendChild(txtNode);
+    div.className = 'notifications';
+    notifBox.appendChild(div);
   }
 }; // End execute_command
 

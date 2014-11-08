@@ -1,5 +1,11 @@
 /* CSS file for MUD Game */
 
+#wrapper {
+  min-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .thin_col, .thick_col {
   height: 500px;
   border: 1px solid black;
@@ -29,7 +35,12 @@ h1 {
   height: 250px;
 }
 
-#notifications {
+#notificationsBox {
   height: 200px;
+  overflow: auto;
   border-top: 1px solid black;
+}
+
+.notifications {
+  padding-top: 5px;
 }
