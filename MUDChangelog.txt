@@ -1,5 +1,8 @@
 Worklog
 
+9 NOV 2014
+- Functions worked on:
+	o parse_command, 
 31 OCT 2014
 - Functions worked on:
   o parse_command, now calls up a function for

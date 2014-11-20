@@ -151,7 +151,7 @@ function execute_command(commandID, userInput) {
     }
     
     
-  } if (commands[commandID] == "look") {
+  } else if (commands[commandID] == "look") {
     
     commandInfo = userInput.slice(5);
     commandInfo = commandInfo.toLowerCase();
@@ -184,6 +184,10 @@ function execute_command(commandID, userInput) {
     div.appendChild(txtNode);
     div.className = 'notifications';
     notifBox.appendChild(div);
+  } else if (commands[commandID] == "take") {
+    
+    commandInfo = userInput.slice(5);
+    
   }
 }; // End execute_command
 
