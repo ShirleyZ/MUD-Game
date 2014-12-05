@@ -14,6 +14,15 @@
 
 */
 
+// #### EVENT HANDLERS ####
+$(document).ready(function() {
+  $('#userCommandBox').keypress(function(e) {
+    if (e.which == 13) {
+      var userInput = $('#userCommandBox').val();
+      parse_command(userInput);
+    }
+  });
+});
 
 // #### PLAYER ####
 
