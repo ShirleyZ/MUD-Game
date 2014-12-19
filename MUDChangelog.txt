@@ -1,5 +1,12 @@
 Worklog
 
+13 DEC 2014
+- Functions worked on:
+	o execute_command, 'help' command functional
+							 
+- Removed inventoryItems global variable
+  Reason: player.inventory[#] chosen over inventoryItems[#] 
+  as the name seems clearer.
 9 NOV 2014
 - Functions worked on:
 	o parse_command, 

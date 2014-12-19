@@ -14,6 +14,24 @@
 
 */
 
+// #### GLOBAL VARIABLES ####
+
+// Player
+var player;
+
+// Player Navigation
+var commands = ["go",  // Navigation
+                "look", "take", "drop", // Interaction
+                "help"];
+
+var currRoom;
+
+// Room creation/editing
+var map = new Array;
+
+// Environment Items
+var envItems = new Array;
+
 // #### EVENT HANDLERS ####
 $(document).ready(function() {
   $('#userCommandBox').keypress(function(e) {
@@ -26,8 +44,6 @@ $(document).ready(function() {
 
 // #### PLAYER ####
 
-var player;
-
 function create_player (name) {
   var a = {
     name: name,
@@ -36,7 +52,8 @@ function create_player (name) {
     maxhp: 10,
     speed: 10,
     strength: 10,
-    intelligence: 10
+    intelligence: 10,
+    inventory: new Array()
   };
   player = a;
   return a;
@@ -64,11 +81,15 @@ function print_player () {
 
 // #### Player Navigation/Commands ###
 
-var commands = ["go",  // Navigation
-                "look", "take", "drop", // Interaction
-                "help"];
-
-var currRoom;
+function add_notif (text) {
+    var txtNode = document.createTextNode(text);
+    var div = document.createElement('div');
+    var notifBox = document.getElementById('notificationsBox');
+    
+    div.appendChild(txtNode);
+    div.className = 'notifications';
+    notifBox.appendChild(div);
+}
 
 function parse_command (userInput) {
   /** PURPOSE: grab the text that the player has entered and see
@@ -110,6 +131,8 @@ function parse_command (userInput) {
         commandFound = true;
         if (userInput == "look") {
           // execute_command();
+        } else if (userInput == "help") {
+          execute_command(i, userInput);
         } else {
           console.log(userInput + " what?");
         }
@@ -185,18 +208,55 @@ function execute_command(commandID, userInput) {
       itemDesc = "What? That's not here.";
     }
 
-
-    var txtNode = document.createTextNode(itemDesc);
-    var div = document.createElement('div');
-    var notifBox = document.getElementById('notificationsBox');
+    add_notif(itemDesc);
     
-    div.appendChild(txtNode);
-    div.className = 'notifications';
-    notifBox.appendChild(div);
   } else if (commands[commandID] == "take") {
     
     commandInfo = userInput.slice(5);
+    commandInfo = commandInfo.toLowerCase();
     
+    // Searching if item exists
+    var itemFound = 0;
+    var msg = "";
+    console.log(commandInfo);
+    for (key in currRoom.envItems) {
+      if (currRoom.envItems[key].name == commandInfo) {
+        if (currRoom.envItems[key].method == "take") {
+          itemFound = 1;
+        } else {
+          itemFound = 2;
+        }
+      }
+      
+      // if 1 item was found, if 2 item was found but not gettable
+      if (itemFound == 1 || itemFound == 2) { 
+        break;
+      }
+    }
+    
+    if (itemFound == 0) {
+      msg = "You don't see that here";
+      add_notif(msg);
+      
+      
+    } else if (itemFound == 2) {
+      msg = "You can't take that!";
+      add_notif(msg);
+      
+    
+    // Existing item is removed from room and placed in player inventory
+    } else if (itemFound == 1) {
+      msg = "You take " + commandInfo;
+      add_notif(msg);
+      
+    }
+    console.log(itemFound + ": " + commandInfo);
+    
+    
+    
+  } else if (commands[commandID] == "help") {
+    msg = "The currently implemented commands are GO, LOOK, TAKE and HELP. For example, go south, look basket.";
+    add_notif(msg);
   }
 }; // End execute_command
 
@@ -211,7 +271,6 @@ function helper_find_exit(direction) {
 }
 
 // #### Room Creation/Editing ####
-var map = new Array;
 
 function create_room (name, desc) {
   var newRoom = {
@@ -331,7 +390,6 @@ var log_all_rooms = function () {
       - description
       - method of interaction (look/use)
 */
-var envItems = new Array;
 
 var add_new_env_item = function (roomID, name, desc, method) {
   var newEnvItem = {
@@ -356,16 +414,3 @@ var log_all_env_items = function () {
     log_env_item(key);
   }
 };
-// #### Inventory Items #### 
-/** List of items that users can interact with in
-    the rooms of the maps.
-    Decided to put in a single array > in the rooms
-    (give rooms inventory) so all items can be accessed
-    from the one area instead of hidden away in rooms
-    CONTAINS:
-      - name
-      - description
-      - what its use is
-*/
-var inventoryItems = new Array;
-var invItemsCount = 0;
